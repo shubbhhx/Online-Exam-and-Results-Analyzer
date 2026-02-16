@@ -1,0 +1,46 @@
+<%- include('../partials/header', { title: title, pageLoading: pageLoading }) %>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/teacher_sidebar') %>
+    <div class="col-md-9 p-4 section-hero">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2>Teacher Dashboard</h2>
+        <span class="badge-soft">Pending Evaluations: <%= pendingEvaluations %></span>
+      </div>
+      <div class="row g-3 mt-2">
+        <% subjects.forEach((subject) => { %>
+          <div class="col-md-6">
+            <div class="card card-elevated p-4">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h5 class="mb-1"><%= subject.name %></h5>
+                  <div class="text-muted"><%= subject.course_name %> | Semester <%= subject.semester_number %></div>
+                </div>
+                <i class="bi bi-journal-bookmark text-muted"></i>
+              </div>
+              <div class="mt-3">
+                <div class="d-flex justify-content-between">
+                  <span>MCQ Progress</span>
+                  <span><%= subject.mcq_count %>/40</span>
+                </div>
+                <div class="progress mt-1">
+                  <div class="progress-bar bg-success" style="width: <%= Math.min((subject.mcq_count / 40) * 100, 100) %>%"></div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <div class="d-flex justify-content-between">
+                  <span>Descriptive Progress</span>
+                  <span><%= subject.desc_count %>/10</span>
+                </div>
+                <div class="progress mt-1">
+                  <div class="progress-bar bg-info" style="width: <%= Math.min((subject.desc_count / 10) * 100, 100) %>%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,103 @@
+<%- include('../partials/header', { title: title }) %>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/admin_sidebar') %>
+    <div class="col-md-9 p-4">
+      <h2>Manage Students</h2>
+      <form class="row g-3" method="POST" action="/admin/students">
+        <div class="col-md-3">
+          <input class="form-control" name="name" placeholder="Name" required />
+        </div>
+        <div class="col-md-3">
+          <input class="form-control" name="email" type="email" placeholder="Email" required />
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" name="password" type="text" placeholder="Password" required />
+        </div>
+        <div class="col-md-2">
+          <select class="form-select" name="course_id" id="adminCourseSelect" required>
+            <option value="">Course</option>
+            <% courses.forEach((course) => { %>
+              <option value="<%= course.id %>"><%= course.name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select class="form-select" name="semester_id" id="adminSemesterSelect" required>
+            <option value="">Semester</option>
+            <% semesters.forEach((semester) => { %>
+              <option value="<%= semester.id %>" data-course="<%= semester.course_id %>">
+                <%= semester.title %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <button class="btn btn-brand w-100" type="submit">Add</button>
+        </div>
+      </form>
+      <div class="table-responsive mt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Roll Number</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Course</th>
+              <th>Semester</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% students.forEach((student) => { %>
+              <tr>
+                <td><%= student.roll_number %></td>
+                <td><input class="form-control" name="name" value="<%= student.name %>" form="update-<%= student.id %>" /></td>
+                <td><input class="form-control" name="email" value="<%= student.email %>" form="update-<%= student.id %>" /></td>
+                <td><span class="text-muted"><%= student.course_name %></span></td>
+                <td>
+                  <select class="form-select" name="semester_id" form="update-<%= student.id %>">
+                    <% semesters.forEach((semester) => { %>
+                      <option
+                        value="<%= semester.id %>"
+                        <%= semester.id === student.semester_id ? 'selected' : '' %>
+                      >
+                        <%= semester.title %>
+                      </option>
+                    <% }) %>
+                  </select>
+                </td>
+                <td class="d-flex gap-2">
+                  <form method="POST" id="update-<%= student.id %>" action="/admin/students/<%= student.id %>/update">
+                    <button class="btn btn-sm btn-outline-dark" type="submit">Update</button>
+                  </form>
+                  <form method="POST" action="/admin/students/<%= student.id %>/delete">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const adminCourseSelect = document.getElementById("adminCourseSelect");
+  const adminSemesterSelect = document.getElementById("adminSemesterSelect");
+
+  function filterAdminSemesters() {
+    const courseId = adminCourseSelect.value;
+    Array.from(adminSemesterSelect.options).forEach((option) => {
+      if (!option.value) return;
+      option.hidden = option.dataset.course !== courseId;
+    });
+    adminSemesterSelect.value = "";
+  }
+
+  if (adminCourseSelect && adminSemesterSelect) {
+    adminCourseSelect.addEventListener("change", filterAdminSemesters);
+  }
+</script>
+<%- include('../partials/footer') %>

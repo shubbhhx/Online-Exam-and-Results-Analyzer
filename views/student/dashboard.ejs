@@ -1,0 +1,88 @@
+<%- include('../partials/header', { title: title, pageLoading: pageLoading }) %>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/student_sidebar') %>
+    <div class="col-md-9 p-4 section-hero">
+      <h2>Welcome, <%= student.name %></h2>
+      <p class="text-muted">Course: <%= student.course_name %> | Semester <%= student.semester_number %></p>
+      <h5 class="mt-4">Subjects</h5>
+      <div class="row g-3">
+        <% subjects.forEach((subject) => { %>
+          <div class="col-md-4">
+            <div class="card card-elevated p-3">
+              <div class="d-flex align-items-center gap-2">
+                <div class="stat-icon"><i class="bi bi-journal-text"></i></div>
+                <div>
+                  <h5 class="mb-1"><%= subject.name %></h5>
+                  <p class="mb-0 text-muted"><%= subject.course_name %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+      <h5 class="mt-5">Available Exams</h5>
+      <div class="row g-4 mt-2">
+        <div class="col-lg-7">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Date</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% exams.forEach((exam) => { %>
+                  <tr>
+                    <td><%= exam.subject_name %></td>
+                    <td><%= new Date(exam.exam_date).toLocaleString() %></td>
+                    <td><%= exam.duration_minutes %> min</td>
+                    <td>
+                      <span class="badge-soft"><%= exam.status %></span>
+                    </td>
+                    <td>
+                      <% if (exam.status === 'Not Started') { %>
+                        <a class="btn btn-sm btn-brand" href="/student/exams/<%= exam.id %>/start">Start</a>
+                      <% } else { %>
+                        <a class="btn btn-sm btn-outline-dark" href="/student/history">View</a>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="card card-elevated p-3">
+            <h5>Performance Snapshot</h5>
+            <canvas id="studentDashChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/vendor/chartjs/chart.umd.min.js"></script>
+<script>
+  const perfLabels = <%- JSON.stringify(subjectPerf.map(s => s.subject_name)) %>;
+  const perfData = <%- JSON.stringify(subjectPerf.map(s => Number(s.percentage || 0))) %>;
+
+  new Chart(document.getElementById('studentDashChart'), {
+    type: 'bar',
+    data: {
+      labels: perfLabels,
+      datasets: [{
+        label: 'Percentage',
+        data: perfData,
+        backgroundColor: '#1b9aaa'
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+  });
+</script>
+<%- include('../partials/footer') %>

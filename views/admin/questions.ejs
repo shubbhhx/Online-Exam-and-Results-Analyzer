@@ -1,0 +1,32 @@
+<%- include('../partials/header', { title: title }) %>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/admin_sidebar') %>
+    <div class="col-md-9 p-4">
+      <h2>Question Bank (Read Only)</h2>
+      <div class="table-responsive mt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Teacher</th>
+              <th>Type</th>
+              <th>Question</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% questions.forEach((question) => { %>
+              <tr>
+                <td><%= question.subject_name %></td>
+                <td><%= question.teacher_name %></td>
+                <td><%= question.question_type %></td>
+                <td><%= question.question_text %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

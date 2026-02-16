@@ -1,0 +1,63 @@
+<%- include('../partials/header', { title: title }) %>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/admin_sidebar') %>
+    <div class="col-md-9 p-4">
+      <h2>Manage Teachers</h2>
+      <form class="row g-3" method="POST" action="/admin/teachers">
+        <div class="col-md-3">
+          <input class="form-control" name="name" placeholder="Name" required />
+        </div>
+        <div class="col-md-3">
+          <input class="form-control" name="email" type="email" placeholder="Email" required />
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" name="password" type="text" placeholder="Password" required />
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" name="department" placeholder="Department" required />
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" name="phone" placeholder="Phone" />
+        </div>
+        <div class="col-md-12">
+          <button class="btn btn-brand w-100" type="submit">Add</button>
+        </div>
+      </form>
+      <div class="table-responsive mt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Teacher ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Department</th>
+              <th>Phone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% teachers.forEach((teacher) => { %>
+              <tr>
+                <td><span class="badge-soft"><%= teacher.teacher_code %></span></td>
+                <td><input class="form-control" name="name" value="<%= teacher.name %>" form="update-<%= teacher.id %>" /></td>
+                <td><input class="form-control" name="email" value="<%= teacher.email %>" form="update-<%= teacher.id %>" /></td>
+                <td><input class="form-control" name="department" value="<%= teacher.department %>" form="update-<%= teacher.id %>" /></td>
+                <td><input class="form-control" name="phone" value="<%= teacher.phone || '' %>" form="update-<%= teacher.id %>" /></td>
+                <td class="d-flex gap-2">
+                  <form method="POST" id="update-<%= teacher.id %>" action="/admin/teachers/<%= teacher.id %>/update">
+                    <button class="btn btn-sm btn-outline-dark" type="submit">Update</button>
+                  </form>
+                  <form method="POST" action="/admin/teachers/<%= teacher.id %>/delete">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

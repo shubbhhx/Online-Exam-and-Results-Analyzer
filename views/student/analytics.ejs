@@ -1,0 +1,33 @@
+<%- include('../partials/header', { title: title }) %>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/student_sidebar') %>
+    <div class="col-md-9 p-4">
+      <h2>Performance Analytics</h2>
+      <div class="card card-elevated p-3">
+        <canvas id="studentChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/vendor/chartjs/chart.umd.min.js"></script>
+<script>
+  const labels = <%- JSON.stringify(subjectPerf.map(s => s.subject_name)) %>;
+  const data = <%- JSON.stringify(subjectPerf.map(s => Number(s.percentage || 0))) %>;
+
+  new Chart(document.getElementById('studentChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Percentage',
+        data,
+        borderColor: '#2f7ac7',
+        backgroundColor: 'rgba(47, 122, 199, 0.2)',
+        tension: 0.3
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+  });
+</script>
+<%- include('../partials/footer') %>

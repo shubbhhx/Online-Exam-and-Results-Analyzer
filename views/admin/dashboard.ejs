@@ -1,0 +1,125 @@
+<%- include('../partials/header', { title: title, pageLoading: pageLoading }) %>
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/admin_sidebar') %>
+    <div class="col-md-9 p-4 section-hero">
+      <div class="section-hero">
+        <h2>Dashboard</h2>
+        <div class="row g-3 mt-2">
+          <div class="col-md-3">
+            <div class="card card-stat p-3 stat-card">
+              <div class="stat-icon"><i class="bi bi-people"></i></div>
+              <div>
+                <div class="text-muted">Students</div>
+                <h3 class="mb-0"><%= stats.students %></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card card-stat p-3 stat-card">
+              <div class="stat-icon"><i class="bi bi-person-badge"></i></div>
+              <div>
+                <div class="text-muted">Teachers</div>
+                <h3 class="mb-0"><%= stats.teachers %></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card card-stat p-3 stat-card">
+              <div class="stat-icon"><i class="bi bi-book"></i></div>
+              <div>
+                <div class="text-muted">Subjects</div>
+                <h3 class="mb-0"><%= stats.subjects %></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card card-stat p-3 stat-card">
+              <div class="stat-icon"><i class="bi bi-collection"></i></div>
+              <div>
+                <div class="text-muted">Courses</div>
+                <h3 class="mb-0"><%= stats.courses %></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-4 mt-4">
+          <div class="col-lg-7">
+            <div class="card card-elevated p-4">
+              <h5 class="mb-3">Course Structure</h5>
+              <% if (!structure.length) { %>
+                <p class="text-muted">No courses found yet. Add courses and semesters to see hierarchy.</p>
+              <% } %>
+              <% structure.forEach((course) => { %>
+                <div class="mb-3">
+                  <div class="fw-semibold"><%= course.name %> (<%= course.code %>)</div>
+                  <% course.semesters.forEach((semester) => { %>
+                    <div class="ms-3 mt-2">
+                      <span class="badge-soft">Semester <%= semester.semester_number %></span>
+                      <div class="ms-3 text-muted">
+                        <% if (!semester.subjects.length) { %>
+                          <span>No subjects added yet</span>
+                        <% } %>
+                        <% semester.subjects.forEach((subject) => { %>
+                          <span class="me-2">• <%= subject.name %></span>
+                        <% }) %>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="card card-elevated p-4 mb-4">
+              <h5 class="mb-3">Pass vs Fail</h5>
+              <canvas id="passFailMini"></canvas>
+            </div>
+            <div class="card card-elevated p-4 mb-4">
+              <h5 class="mb-3">Recent Students</h5>
+              <% if (!recentStudents.length) { %>
+                <p class="text-muted">No recent students.</p>
+              <% } %>
+              <% recentStudents.forEach((student) => { %>
+                <div class="d-flex justify-content-between border-bottom py-2">
+                  <span><%= student.name %></span>
+                  <span class="text-muted"><%= student.roll_number %></span>
+                </div>
+              <% }) %>
+            </div>
+            <div class="card card-elevated p-4">
+              <h5 class="mb-3">Upcoming Exams</h5>
+              <% if (!recentExams.length) { %>
+                <p class="text-muted">No exams scheduled.</p>
+              <% } %>
+              <% recentExams.forEach((exam) => { %>
+                <div class="d-flex justify-content-between border-bottom py-2">
+                  <span><%= exam.subject_name %></span>
+                  <span class="text-muted"><%= new Date(exam.exam_date).toLocaleString() %></span>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/vendor/chartjs/chart.umd.min.js"></script>
+<script>
+  const passFailLabels = <%- JSON.stringify(passFail.map(p => p.status)) %>;
+  const passFailData = <%- JSON.stringify(passFail.map(p => p.count)) %>;
+
+  new Chart(document.getElementById('passFailMini'), {
+    type: 'doughnut',
+    data: {
+      labels: passFailLabels,
+      datasets: [{
+        data: passFailData,
+        backgroundColor: ['#1b9aaa', '#ff7a59']
+      }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } } }
+  });
+</script>
+<%- include('../partials/footer') %>
