@@ -1,0 +1,54 @@
+{% include 'partials/header.html' %}
+<div class="container-fluid">
+  <div class="row">
+    {% include 'partials/teacher_sidebar.html' %}
+    <div class="col-md-9 p-4">
+      <h2>Schedule Exams</h2>
+      {% if error %}
+        <div class="alert alert-warning">{{ error }}</div>
+      {% endif %}
+      <form class="row g-3" method="POST" action="/teacher/schedule">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <div class="col-md-5">
+          <select class="form-select" name="subject_id" required>
+            <option value="">Select Subject</option>
+            {% for subject in subjects %}
+              <option value="{{ subject.id }}">{{ subject.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <input class="form-control" name="exam_date" type="datetime-local" required />
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" name="duration_minutes" type="number" min="10" max="180" placeholder="Duration" required />
+        </div>
+        <div class="col-md-1">
+          <button class="btn btn-brand w-100" type="submit">Add</button>
+        </div>
+      </form>
+      <div class="table-responsive mt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Date</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for exam in exams %}
+              <tr>
+                <td>{{ exam.subject_name }}</td>
+                <td>{{ exam.exam_date|format_datetime }}</td>
+                <td>{{ exam.duration_minutes }} min</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'partials/footer.html' %}
+

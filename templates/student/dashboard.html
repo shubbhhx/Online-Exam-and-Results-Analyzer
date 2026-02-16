@@ -1,0 +1,89 @@
+{% include 'partials/header.html' %}
+<div class="container-fluid">
+  <div class="row">
+    {% include 'partials/student_sidebar.html' %}
+    <div class="col-md-9 p-4 section-hero">
+      <h2>Welcome, {{ student.name }}</h2>
+      <p class="text-muted">Course: {{ student.course_name }} | Semester {{ student.semester_number }}</p>
+      <h5 class="mt-4">Subjects</h5>
+      <div class="row g-3">
+        {% for subject in subjects %}
+          <div class="col-md-4">
+            <div class="card card-elevated p-3">
+              <div class="d-flex align-items-center gap-2">
+                <div class="stat-icon"><i class="bi bi-journal-text"></i></div>
+                <div>
+                  <h5 class="mb-1">{{ subject.name }}</h5>
+                  <p class="mb-0 text-muted">{{ subject.course_name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <h5 class="mt-5">Available Exams</h5>
+      <div class="row g-4 mt-2">
+        <div class="col-lg-7">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Date</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for exam in exams %}
+                  <tr>
+                    <td>{{ exam.subject_name }}</td>
+                    <td>{{ exam.exam_date|format_datetime }}</td>
+                    <td>{{ exam.duration_minutes }} min</td>
+                    <td>
+                      <span class="badge-soft">{{ exam.status }}</span>
+                    </td>
+                    <td>
+                      {% if exam.status == 'Not Started' %}
+                        <a class="btn btn-sm btn-brand" href="/student/exams/{{ exam.id }}/start">Start</a>
+                      {% else %}
+                        <a class="btn btn-sm btn-outline-dark" href="/student/history">View</a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="card card-elevated p-3">
+            <h5>Performance Snapshot</h5>
+            <canvas id="studentDashChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const perfLabels = {{ subjectPerf|map(attribute='subject_name')|list|tojson }};
+  const perfData = {{ subjectPerf|map(attribute='percentage')|list|tojson }};
+
+  new Chart(document.getElementById('studentDashChart'), {
+    type: 'bar',
+    data: {
+      labels: perfLabels,
+      datasets: [{
+        label: 'Percentage',
+        data: perfData,
+        backgroundColor: '#1b9aaa'
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+  });
+</script>
+{% include 'partials/footer.html' %}
+

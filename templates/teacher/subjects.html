@@ -1,0 +1,31 @@
+{% include 'partials/header.html' %}
+<div class="container-fluid">
+  <div class="row">
+    {% include 'partials/teacher_sidebar.html' %}
+    <div class="col-md-9 p-4">
+      <h2>Assigned Subjects</h2>
+      <div class="table-responsive mt-3">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Course</th>
+              <th>Semester</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subject in subjects %}
+              <tr>
+                <td>{{ subject.name }}</td>
+                <td>{{ subject.course_name }}</td>
+                <td>Semester {{ subject.semester_number }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'partials/footer.html' %}
+

@@ -1,0 +1,9 @@
+Flask
+Flask-Login
+Flask-Session
+PyMySQL
+python-dotenv
+gunicorn
+Werkzeug
+itsdangerous
+click

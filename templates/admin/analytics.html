@@ -1,0 +1,53 @@
+{% include 'partials/header.html' %}
+<div class="container-fluid">
+  <div class="row">
+    {% include 'partials/admin_sidebar.html' %}
+    <div class="col-md-9 p-4">
+      <h2>Analytics</h2>
+      <div class="row g-4 mt-2">
+        <div class="col-lg-6">
+          <div class="card card-elevated p-3">
+            <h5>Pass vs Fail</h5>
+            <canvas id="passFailChart"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-elevated p-3">
+            <h5>Subject Performance</h5>
+            <canvas id="subjectChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const passFailLabels = {{ passFail|map(attribute='status')|list|tojson }};
+  const passFailData = {{ passFail|map(attribute='count')|list|tojson }};
+  const subjectLabels = {{ subjectPerf|map(attribute='subject_name')|list|tojson }};
+  const subjectData = {{ subjectPerf|map(attribute='avg_percent')|list|tojson }};
+
+  new Chart(document.getElementById('passFailChart'), {
+    type: 'doughnut',
+    data: {
+      labels: passFailLabels,
+      datasets: [{ data: passFailData, backgroundColor: ['#2f7ac7', '#ff7a59'] }]
+    }
+  });
+
+  new Chart(document.getElementById('subjectChart'), {
+    type: 'bar',
+    data: {
+      labels: subjectLabels,
+      datasets: [{
+        label: 'Avg %',
+        data: subjectData,
+        backgroundColor: '#1d2a44'
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+  });
+</script>
+{% include 'partials/footer.html' %}
+

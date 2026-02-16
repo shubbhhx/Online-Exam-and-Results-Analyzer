@@ -1,0 +1,42 @@
+{% include 'partials/header.html' %}
+<div class="container py-4">
+  <h2>Edit Question</h2>
+  <div class="card card-stat p-4">
+    <form method="POST" action="/teacher/questions/{{ question.id }}/update">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <div class="mb-3">
+        <label class="form-label">Subject</label>
+        <input class="form-control" value="{{ question.subject_name }}" disabled />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Question</label>
+        <textarea class="form-control" name="question_text" rows="3" required>{{ question.question_text }}</textarea>
+      </div>
+      {% if question.question_type == 'MCQ' %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <input class="form-control" name="option_a" value="{{ question.option_a }}" placeholder="Option A" />
+          </div>
+          <div class="col-md-6">
+            <input class="form-control" name="option_b" value="{{ question.option_b }}" placeholder="Option B" />
+          </div>
+          <div class="col-md-6">
+            <input class="form-control" name="option_c" value="{{ question.option_c }}" placeholder="Option C" />
+          </div>
+          <div class="col-md-6">
+            <input class="form-control" name="option_d" value="{{ question.option_d }}" placeholder="Option D" />
+          </div>
+          <div class="col-md-6">
+            <input class="form-control" name="correct_option" value="{{ question.correct_option }}" placeholder="Correct Option (A-D)" />
+          </div>
+        </div>
+      {% endif %}
+      <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-brand" type="submit">Save</button>
+        <a class="btn btn-outline-dark" href="/teacher/questions">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% include 'partials/footer.html' %}
+

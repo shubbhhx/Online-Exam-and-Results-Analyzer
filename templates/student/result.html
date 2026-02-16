@@ -1,0 +1,17 @@
+{% include 'partials/header.html' %}
+<div class="container-fluid">
+  <div class="row">
+    {% include 'partials/student_sidebar.html' %}
+    <div class="col-md-9 p-4">
+      <div class="card card-elevated p-4">
+        <h2>Result - {{ result.subject_name }}</h2>
+        <p>Total Marks: <strong>{{ result.total_marks }}</strong></p>
+        <p>Percentage: <strong>{{ result.percentage }}%</strong></p>
+        <p>Status: <strong>{{ result.status }}</strong></p>
+        <a class="btn btn-brand" href="/student/history">Back</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'partials/footer.html' %}
+

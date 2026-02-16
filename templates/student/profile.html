@@ -1,0 +1,47 @@
+{% include 'partials/header.html' %}
+<div class="container-fluid">
+  <div class="row">
+    {% include 'partials/student_sidebar.html' %}
+    <div class="col-md-9 p-4 section-hero">
+      <h2>Student Profile</h2>
+      <div class="card card-elevated p-4">
+        <form method="POST" action="/student/profile" data-show-loader="true">
+          <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Full Name</label>
+              <input class="form-control" name="name" value="{{ student.name }}" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input class="form-control" name="email" type="email" value="{{ student.email }}" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input class="form-control" name="phone" value="{{ student.phone or '' }}" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Address</label>
+              <input class="form-control" name="address" value="{{ student.address or '' }}" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Roll Number</label>
+              <input class="form-control" value="{{ student.roll_number }}" disabled />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Course</label>
+              <input class="form-control" value="{{ student.course_name }}" disabled />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Semester</label>
+              <input class="form-control" value="{{ student.semester_title }}" disabled />
+            </div>
+          </div>
+          <button class="btn btn-brand mt-4" type="submit">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'partials/footer.html' %}
+

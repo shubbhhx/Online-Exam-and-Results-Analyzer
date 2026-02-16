@@ -1,0 +1,52 @@
+{% include 'partials/header.html' %}
+<div class="container-fluid">
+  <div class="row">
+    {% include 'partials/admin_sidebar.html' %}
+    <div class="col-md-9 p-4 section-hero">
+      <h2>Manage Courses</h2>
+      <form class="row g-3" method="POST" action="/admin/courses">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <div class="col-md-5">
+          <input class="form-control" name="name" placeholder="Course Name" required />
+        </div>
+        <div class="col-md-4">
+          <input class="form-control" name="code" placeholder="Course Code (e.g., BTECH-CS)" required />
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-brand w-100" type="submit">Add Course</button>
+        </div>
+      </form>
+      <div class="table-responsive mt-4">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Code</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for course in courses %}
+              <tr>
+                <td><input class="form-control" name="name" value="{{ course.name }}" form="update-{{ course.id }}" /></td>
+                <td><input class="form-control" name="code" value="{{ course.code }}" form="update-{{ course.id }}" /></td>
+                <td class="d-flex gap-2">
+                  <form method="POST" id="update-{{ course.id }}" action="/admin/courses/{{ course.id }}/update">
+                    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+                    <button class="btn btn-sm btn-outline-dark" type="submit">Update</button>
+                  </form>
+                  <form method="POST" action="/admin/courses/{{ course.id }}/delete">
+                    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'partials/footer.html' %}
+
