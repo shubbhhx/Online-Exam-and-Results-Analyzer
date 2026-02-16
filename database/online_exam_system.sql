@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS online_exam_system;
-USE online_exam_system;
+
+
 
 CREATE TABLE courses (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -118,7 +118,7 @@ CREATE TABLE results (
 );
 
 INSERT INTO admins (name, email, password) VALUES
-('System Admin', 'admin@college.edu', 'admin123');
+('System Admin', 'shubh@admin.com', 'shubh6967');
 
 INSERT INTO courses (name, code) VALUES
 ('BTech Computer Science', 'BTECH-CS'),
