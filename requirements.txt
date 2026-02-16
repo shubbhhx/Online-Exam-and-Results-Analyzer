@@ -7,8 +7,5 @@ gunicorn
 Werkzeug
 itsdangerous
 click
-<<<<<<< HEAD
 cryptography
-=======
-cryptography
->>>>>>> 107b06db6d41151e2b6f36d40d34d5715a77b9b5
+
